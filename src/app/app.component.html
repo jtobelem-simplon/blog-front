@@ -1,0 +1,23 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <div *ngIf="isAuthenticated">
+      <button mat-button [matMenuTriggerFor]="menuUser">{{user}}</button>
+      <mat-menu #menuUser="matMenu">
+        <button mat-menu-item (click)="oktaAuth.logout()">logout</button>
+      </mat-menu>
+    </div>
+    <div *ngIf="!isAuthenticated">
+      <button mat-button (click)="oktaAuth.loginRedirect()">login</button>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<router-outlet></router-outlet>
+
+<mat-toolbar color="secondary">
+  <mat-toolbar-row>
+    <div *ngIf="isAuthenticated">
+      <button mat-button (click)="openDialog()" >+</button>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
