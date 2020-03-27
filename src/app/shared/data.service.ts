@@ -1,14 +1,13 @@
-import { PostFilter } from './post-filter';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import {Post} from "../shared/model";
+import {Post} from "./data.model";
 import {tap} from "rxjs/operators";
 
 const headers = new HttpHeaders().set('Accept', 'application/json');
 
 @Injectable()
-export class PostService {
+export class DataService {
   postList: Post[] = [];
   api = 'http://localhost:8080/api/posts';
 
@@ -21,8 +20,8 @@ export class PostService {
     return this.http.get<Post>(url, {params, headers});
   }
 
-  load(filter: PostFilter): void {
-    this.find(filter).subscribe(result => {
+  load(): void {
+    this.find().subscribe(result => {
         this.postList = result;
       },
       err => {
@@ -31,7 +30,7 @@ export class PostService {
     );
   }
 
-  find(filter: PostFilter): Observable<Post[]> {
+  find(): Observable<Post[]> {
     const params = {
     };
 

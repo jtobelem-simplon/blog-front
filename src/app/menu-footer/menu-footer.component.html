@@ -1,0 +1,7 @@
+<mat-toolbar color="secondary">
+  <mat-toolbar-row>
+    <div *ngIf="jwtService.loggedIn.value">
+      <button mat-button (click)="openDialog()">+</button>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>

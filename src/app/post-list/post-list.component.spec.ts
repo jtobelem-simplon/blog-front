@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { PostListComponent } from './post-list.component';
-import { PostService } from '../post.service';
+import { DataService } from '../shared/data.service';
 
 describe('PostListComponent', () => {
   let component: PostListComponent;
@@ -13,7 +13,7 @@ describe('PostListComponent', () => {
     TestBed.configureTestingModule({
       declarations: [PostListComponent],
       imports: [FormsModule, HttpClientTestingModule, RouterTestingModule],
-      providers: [PostService]
+      providers: [DataService]
     })
       .compileComponents();
   }));

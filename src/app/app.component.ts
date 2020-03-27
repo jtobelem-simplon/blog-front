@@ -1,10 +1,7 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {Post} from "./shared/model";
-import {PostService} from "./post/post.service";
-import {Router} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {JwtService} from "./shared/jwt/jwt.service";
+import {FeedbackService} from "./shared/feedback/feedback.service";
 
 @Component({
   selector: 'app-root',
@@ -14,74 +11,23 @@ import {JwtService} from "./shared/jwt/jwt.service";
 export class AppComponent implements OnInit {
 
   title = 'blog-front';
-  hide = true;
-  showLogin = false;
 
-  constructor(public jwtService: JwtService, public dialog: MatDialog, private postService: PostService, private router:Router, private snackBar: MatSnackBar) {
+  constructor(public jwtService: JwtService, private feedbackService: FeedbackService, private snackBar: MatSnackBar) {
 
   }
 
-  async ngOnInit() {
-
+  ngOnInit() {
+    this.feedbackService.message.subscribe(res => this.openSnackBar(res, undefined));
   }
 
-  loginBouton() {
-    this.showLogin = !this.showLogin;
-  }
-
-  login(user : string, password : string) {
-    this.jwtService.login(user, password).subscribe(res => {
-      this.loginBouton();
-      this.openSnackBar(`connected`,undefined);
-    });
-  }
-
-  logout() {
-    this.jwtService.logout();
-    this.openSnackBar("disconnected", undefined);
-  }
-
-  openSnackBar(message : string, action :string) {
+  openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
       duration: 2000
     });
   }
-
-
-
-  openDialog(): void {
-    const dialogRef = this.dialog.open(NewPostDialog, {
-      width: '250px',
-      data : {}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
-      this.postService.save(result).toPromise().then(reponse =>
-      {
-        // this.router.navigate(['posts']);
-        location.reload();
-        this.openSnackBar(`new post created at ${reponse.dateTime} with id ${reponse.id}`,"");
-      });
-      // this.animal = result;
-    });
-  }
 }
 
-@Component({
-  selector: 'new-post-dialog',
-  templateUrl: 'new-post-dialog.html',
-})
-export class NewPostDialog {
 
-  constructor(
-    public dialogRef: MatDialogRef<NewPostDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: Post) {}
 
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
 
-}
 

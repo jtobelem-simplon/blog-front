@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {BehaviorSubject} from "rxjs";
-import {User} from "../model";
+import {User} from "../data.model";
 import * as jwt_decode from 'jwt-decode';
 import {tap} from "rxjs/operators";
 

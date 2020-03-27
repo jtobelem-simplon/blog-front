@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {PostFilter} from '../post-filter';
-import {PostService} from '../post.service';
-import {Post} from "../../shared/model";
-import {NewPostDialog} from "../../app.component";
+import {DataService} from '../shared/data.service';
+import {Post} from "../shared/data.model";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {JwtService} from "../../shared/jwt/jwt.service";
+import {JwtService} from "../shared/jwt/jwt.service";
+import {NewPostDialog} from "./new-dialog/new-post-dialog";
 
 @Component({
   selector: 'app-post',
@@ -14,7 +13,6 @@ import {JwtService} from "../../shared/jwt/jwt.service";
 })
 export class PostListComponent implements OnInit {
 
-  filter = new PostFilter();
   selectedPost: Post;
   feedback: any = {};
 
@@ -22,7 +20,7 @@ export class PostListComponent implements OnInit {
     return this.postService.postList;
   }
 
-  constructor(private postService: PostService, public jwtService: JwtService, public dialog: MatDialog, private snackBar: MatSnackBar) {
+  constructor(private postService: DataService, public jwtService: JwtService, public dialog: MatDialog, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -50,7 +48,7 @@ export class PostListComponent implements OnInit {
   }
 
   search(): void {
-    this.postService.load(this.filter);
+    this.postService.load();
   }
 
   select(selected: Post): void {
