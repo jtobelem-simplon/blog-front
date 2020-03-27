@@ -1,10 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import { OktaAuthService } from '@okta/okta-angular';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {Post} from "./shared/model";
 import {PostService} from "./post/post.service";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {JwtService} from "./shared/jwt/jwt.service";
 
 @Component({
   selector: 'app-root',
@@ -14,22 +14,31 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export class AppComponent implements OnInit {
 
   title = 'blog-front';
-  isAuthenticated: boolean;
-  user : string;
+  hide = true;
+  showLogin = false;
 
-  constructor(public oktaAuth: OktaAuthService, public dialog: MatDialog, private postService: PostService, private router:Router, private snackBar: MatSnackBar) {
-    oktaAuth.getUser().then(value => {
-      if (value) {
-        this.user = value.given_name
-      }
-    });
+  constructor(public jwtService: JwtService, public dialog: MatDialog, private postService: PostService, private router:Router, private snackBar: MatSnackBar) {
+
   }
 
   async ngOnInit() {
-    this.isAuthenticated = await this.oktaAuth.isAuthenticated();
-    this.oktaAuth.$authenticationState.subscribe(
-      (isAuthenticated: boolean)  => this.isAuthenticated = isAuthenticated
-    );
+
+  }
+
+  loginBouton() {
+    this.showLogin = !this.showLogin;
+  }
+
+  login(user : string, password : string) {
+    this.jwtService.login(user, password).subscribe(res => {
+      this.loginBouton();
+      this.openSnackBar(`connected`,undefined);
+    });
+  }
+
+  logout() {
+    this.jwtService.logout();
+    this.openSnackBar("disconnected", undefined);
   }
 
   openSnackBar(message : string, action :string) {

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import {Post} from "../shared/model";
+import {tap} from "rxjs/operators";
 
 const headers = new HttpHeaders().set('Accept', 'application/json');
 

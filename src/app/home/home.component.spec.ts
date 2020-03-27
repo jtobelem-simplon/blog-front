@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HomeComponent } from './home.component';
-import { OKTA_CONFIG, OktaAuthModule } from '@okta/okta-angular';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('HomeComponent', () => {
@@ -17,9 +16,8 @@ describe('HomeComponent', () => {
       declarations: [HomeComponent],
       imports: [
         RouterTestingModule,
-        OktaAuthModule
       ],
-      providers: [{provide: OKTA_CONFIG, useValue: oktaConfig}]
+      providers: []
     })
       .compileComponents();
   }));

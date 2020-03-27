@@ -2,10 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {PostFilter} from '../post-filter';
 import {PostService} from '../post.service';
 import {Post} from "../../shared/model";
-import {OktaAuthService} from "@okta/okta-angular";
 import {NewPostDialog} from "../../app.component";
 import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {JwtService} from "../../shared/jwt/jwt.service";
 
 @Component({
   selector: 'app-post',
@@ -17,18 +17,12 @@ export class PostListComponent implements OnInit {
   filter = new PostFilter();
   selectedPost: Post;
   feedback: any = {};
-  user : string;
 
   get postList(): Post[] {
     return this.postService.postList;
   }
 
-  constructor(private postService: PostService, public oktaAuth: OktaAuthService, public dialog: MatDialog, private snackBar: MatSnackBar) {
-    oktaAuth.getUser().then(value => {
-      if (value) {
-        this.user = value.preferred_username
-      }
-    });
+  constructor(private postService: PostService, public jwtService: JwtService, public dialog: MatDialog, private snackBar: MatSnackBar) {
   }
 
   ngOnInit() {

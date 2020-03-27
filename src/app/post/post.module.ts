@@ -24,8 +24,9 @@ import {MatButtonModule} from "@angular/material/button";
     PostEditComponent
   ],
   providers: [PostService],
-  exports: [
-    PostListComponent
-  ]
+    exports: [
+        PostListComponent,
+        PostEditComponent
+    ]
 })
 export class PostModule { }
