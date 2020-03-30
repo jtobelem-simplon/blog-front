@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {JwtService} from "../shared/jwt/jwt.service";
 import {FeedbackService} from "../shared/feedback/feedback.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-menu-header',
@@ -12,13 +13,17 @@ export class MenuHeaderComponent implements OnInit {
   hide = true;
   showLogin = false;
 
-  constructor(public jwtService: JwtService, private feedbackService:FeedbackService) { }
+  constructor(public jwtService: JwtService, private feedbackService:FeedbackService, private router: Router) { }
 
   ngOnInit(): void {
   }
 
   loginBouton() {
     this.showLogin = !this.showLogin;
+  }
+
+  adminBouton() {
+    this.router.navigate(["/admin"]);
   }
 
   login(user : string, password : string) {

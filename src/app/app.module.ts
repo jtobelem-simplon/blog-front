@@ -13,6 +13,9 @@ import {DataService} from "./shared/data.service";
 import {MenuHeaderComponent} from './menu-header/menu-header.component';
 import {MenuFooterComponent} from './menu-footer/menu-footer.component';
 import {NewPostDialog} from "./post-list/new-dialog/new-post-dialog";
+import { UserListComponent } from './user-list/user-list.component';
+import {UserGuard} from "./shared/guards/user.guard";
+import {AdminGuard} from "./shared/guards/admin.guard";
 
 @NgModule({
   declarations: [
@@ -20,7 +23,8 @@ import {NewPostDialog} from "./post-list/new-dialog/new-post-dialog";
     PostListComponent,
     NewPostDialog,
     MenuHeaderComponent,
-    MenuFooterComponent
+    MenuFooterComponent,
+    UserListComponent
   ],
   imports: [
     BrowserModule,
@@ -33,12 +37,12 @@ import {NewPostDialog} from "./post-list/new-dialog/new-post-dialog";
       config: {
         tokenGetter: function  tokenGetter() {
           return     localStorage.getItem('access_token');},
-        whitelistedDomains: ['http://localhost:8080'],
+        whitelistedDomains: ['localhost:8080'],
         blacklistedRoutes: ['http://localhost:8080/api/sign-in']
       }
     })
   ],
-  providers: [DataService],
+  providers: [DataService, UserGuard, AdminGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

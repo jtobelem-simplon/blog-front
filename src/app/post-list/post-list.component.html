@@ -18,8 +18,8 @@
 
         <mat-toolbar-row>
           <mat-card-subtitle>{{post.author.name}}</mat-card-subtitle>
-          <div *ngIf="jwtService.loggedIn.value">
-            <div *ngIf="jwtService.user.value.name == post.author.name">
+          <div *ngIf="jwtService.isLogged()">
+            <div *ngIf="jwtService.getUsername() == post.author.name">
               <button mat-button (click)="openDialog(post)">...</button>
             </div>
           </div>

@@ -1,34 +1,43 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <div *ngIf="jwtService.loggedIn.value">
-      <button mat-button [matMenuTriggerFor]="menuUser">{{jwtService.user.value.name}}</button>
+    <div>
+      <button mat-button routerLink="/">accueil</button>
+    </div>
+
+    <div *ngIf="jwtService.getRole() == 'ADMIN'">
+      <button mat-button routerLink="/admin">admin</button>
+    </div>
+
+    <div *ngIf="jwtService.isLogged()">
+      <button mat-button [matMenuTriggerFor]="menuUser">{{jwtService.getUsername()}}</button>
       <mat-menu #menuUser="matMenu">
         <button mat-menu-item (click)="logout()">logout</button>
       </mat-menu>
     </div>
-    <div *ngIf="!jwtService.loggedIn.value">
+    <div *ngIf="!jwtService.isLogged()">
       <button mat-button (click)="loginBouton()">login</button>
     </div>
+
   </mat-toolbar-row>
 
-  <mat-toolbar-row *ngIf="showLogin">
-    <div class="login-container">
-      <mat-form-field appearance="fill">
-        <mat-label>Username</mat-label>
-        <input #usr matInput required>
-      </mat-form-field>
+</mat-toolbar>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Password</mat-label>
-        <input #pwd matInput [type]="hide ? 'password' : 'text'">
-        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-          [attr.aria-pressed]="hide">
-          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </button>
-      </mat-form-field>
 
-      <button mat-button (click)="login(usr.value, pwd.value)">ok</button>
-    </div>
-  </mat-toolbar-row>
+<mat-toolbar *ngIf="showLogin" color="secondary">
 
+<mat-toolbar-row >
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>Username</mat-label>
+      <input #usr matInput required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input #pwd matInput type="password">
+    </mat-form-field>
+
+    <button mat-button (click)="login(usr.value, pwd.value)">ok</button>
+  </div>
+</mat-toolbar-row>
 </mat-toolbar>
