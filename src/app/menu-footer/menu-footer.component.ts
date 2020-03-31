@@ -26,11 +26,15 @@ export class MenuFooterComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       console.log(result);
-      this.postService.savePost(result).toPromise().then(reponse =>
+      this.postService.savePost(result).toPromise().then(
+        reponse =>
       {
         // this.router.navigate(['posts']);
         location.reload();
-        this.feedbackService.message.next(`new post created at ${reponse.dateTime} with id ${reponse.id}`);
+        this.feedbackService.info.next(`new post created at ${reponse.dateTime} with id ${reponse.id}`);
+      },
+          reason => {
+        this.feedbackService.warning.next(reason);
       });
       // this.animal = result;
     });

@@ -6,7 +6,10 @@ import {BehaviorSubject} from "rxjs";
 })
 export class FeedbackService {
 
-  message : BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
+  info : BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
+  warning : BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
 
   constructor() { }
+
+
 }

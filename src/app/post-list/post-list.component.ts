@@ -36,7 +36,7 @@ export class PostListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       this.dataService.savePost(result).toPromise().then(reponse => {
-        this.feedbackService.message.next(`post updated`);
+        this.feedbackService.info.next(`post updated`);
       });
     });
   }
@@ -52,10 +52,10 @@ export class PostListComponent implements OnInit {
   delete(post: Post): void {
     if (confirm('Are you sure?')) {
       this.dataService.deletePost(post).subscribe(() => {
-          this.feedbackService.message.next('Delete was successful!');
+          this.feedbackService.info.next('Delete was successful!');
         },
         err => {
-          this.feedbackService.message.next('Error deleting.');
+          this.feedbackService.warning.next('Error deleting.');
         }
       );
     }

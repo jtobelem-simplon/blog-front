@@ -24,10 +24,15 @@ export class UserListComponent implements OnInit {
   }
 
   delete(id: number) {
-    this.dataService.deleteUser(id).subscribe(res => {
-      this.feedbackService.message.next(`ùser ${id} deleted`);
-      location.reload();
-    });
+    this.dataService.deleteUser(id).subscribe(
+      res => {
+        this.feedbackService.info.next(`ùser ${id} deleted`);
+        location.reload();
+      },
+      error => {
+        this.feedbackService.warning.next(error.message);
+      }
+    );
   }
 
 }

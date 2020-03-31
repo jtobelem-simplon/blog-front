@@ -1,5 +1,5 @@
 <div *ngIf="postList">
-  <mat-card *ngFor="let post of postList">
+  <mat-card *ngFor="let post of postList" class="card">
 
     <mat-card-header>
       <mat-card-title>{{post.title}}</mat-card-title>
@@ -20,7 +20,7 @@
           <mat-card-subtitle>{{post.author.name}}</mat-card-subtitle>
           <div *ngIf="jwtService.isLogged()">
             <div *ngIf="jwtService.getUsername() == post.author.name">
-              <button mat-button (click)="openDialog(post)">...</button>
+              <mat-icon (click)="openDialog(post)">create</mat-icon>
             </div>
           </div>
         </mat-toolbar-row>

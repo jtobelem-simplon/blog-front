@@ -2,3 +2,13 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.info {
+  background-color: #a3d5d3;
+  color: hotpink;
+}
+
+.warning {
+  background-color: #ff0;
+  color: hotpink;
+}

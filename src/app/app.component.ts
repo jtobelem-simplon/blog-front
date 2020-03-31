@@ -17,13 +17,19 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.feedbackService.message.subscribe(res => this.openSnackBar(res, undefined));
+    this.feedbackService.info.subscribe(next => this.openSnackBar(next, true));
+    this.feedbackService.warning.subscribe(next => this.openSnackBar(next, false));
   }
 
-  openSnackBar(message: string, action: string) {
-    this.snackBar.open(message, action, {
-      duration: 3000
-    });
+  openSnackBar(message: string, info: boolean) {
+    if (message) {
+      const style = info ? "info" : "warning";
+
+      this.snackBar.open(message, undefined, {
+        duration: 3000,
+        panelClass : style
+      });
+    }
   }
 }
 
