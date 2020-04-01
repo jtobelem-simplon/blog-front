@@ -30,6 +30,7 @@ export class MenuFooterComponent implements OnInit {
         reponse =>
       {
         // this.router.navigate(['posts']);
+        // TODO deplace le message dans le service
         location.reload();
         this.feedbackService.info.next(`new post created at ${reponse.dateTime} with id ${reponse.id}`);
       },

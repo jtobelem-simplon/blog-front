@@ -17,15 +17,17 @@ export class PostListComponent implements OnInit {
   selectedPost: Post;
   feedback: any = {};
 
-  get postList(): Post[] {
-    return this.dataService.postList;
-  }
+  posts : Post[];
 
-  constructor(private dataService: DataService, public jwtService: JwtService, public dialog: MatDialog, private feedbackService: FeedbackService) {
+   constructor(private dataService: DataService, public jwtService: JwtService, public dialog: MatDialog, private feedbackService: FeedbackService) {
   }
 
   ngOnInit() {
-    this.search();
+    this.getPosts();
+  }
+
+  getPosts() {
+     this.dataService.getPosts().subscribe(posts => this.posts = posts);
   }
 
   openDialog(post: Post): void {
@@ -34,15 +36,11 @@ export class PostListComponent implements OnInit {
       data: post
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => { // TODO change the message, move to service
       this.dataService.savePost(result).toPromise().then(reponse => {
         this.feedbackService.info.next(`post updated`);
       });
     });
-  }
-
-  search(): void {
-    this.dataService.loadPosts();
   }
 
   select(selected: Post): void {
@@ -50,7 +48,7 @@ export class PostListComponent implements OnInit {
   }
 
   delete(post: Post): void {
-    if (confirm('Are you sure?')) {
+    if (confirm('Are you sure?')) {// TODO change the message
       this.dataService.deletePost(post).subscribe(() => {
           this.feedbackService.info.next('Delete was successful!');
         },

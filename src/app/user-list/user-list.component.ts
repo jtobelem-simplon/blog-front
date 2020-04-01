@@ -15,24 +15,19 @@ export class UserListComponent implements OnInit {
   constructor(public dataService: DataService, private feedbackService: FeedbackService) {
   }
 
+  users : User[];
+
   ngOnInit(): void {
-    this.dataService.loadUsers();
+    this.getUsers();
   }
 
-  get userList(): User[] {
-    return this.dataService.userList;
+  getUsers(){
+    this.dataService.getUsers().subscribe(users => this.users = users);
   }
+
 
   delete(id: number) {
-    this.dataService.deleteUser(id).subscribe(
-      res => {
-        this.feedbackService.info.next(`ùser ${id} deleted`);
-        location.reload();
-      },
-      error => {
-        this.feedbackService.warning.next(error.message);
-      }
-    );
+    this.dataService.deleteUser(id).subscribe();
   }
 
 }
