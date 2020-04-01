@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {JwtService} from "../shared/jwt/jwt.service";
 import {MatDialog} from "@angular/material/dialog";
 import {DataService} from "../shared/data.service";
-import {FeedbackService} from "../shared/feedback/feedback.service";
 import {NewPostDialog} from "../post-list/new-dialog/new-post-dialog";
 
 @Component({
@@ -12,7 +11,8 @@ import {NewPostDialog} from "../post-list/new-dialog/new-post-dialog";
 })
 export class MenuFooterComponent implements OnInit {
 
-  constructor(public jwtService: JwtService, private postService: DataService, private feedbackService:FeedbackService, public dialog: MatDialog) { }
+  constructor(public jwtService: JwtService, private postService: DataService, public dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
   }
@@ -20,26 +20,15 @@ export class MenuFooterComponent implements OnInit {
   openDialog(): void {
     const dialogRef = this.dialog.open(NewPostDialog, {
       width: '250px',
-      data : {}
+      data: {}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
-      this.postService.savePost(result).toPromise().then(
-        reponse =>
-      {
-        // this.router.navigate(['posts']);
-        // TODO deplace le message dans le service
-        location.reload();
-        this.feedbackService.info.next(`new post created at ${reponse.dateTime} with id ${reponse.id}`);
-      },
-          reason => {
-        this.feedbackService.warning.next(reason);
-      });
-      // this.animal = result;
-    });
+      this.postService.savePost(result).subscribe();
+    })
+
   }
+
 }
 
 

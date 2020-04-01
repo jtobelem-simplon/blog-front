@@ -21,6 +21,7 @@
           <div *ngIf="jwtService.isLogged()">
             <div *ngIf="jwtService.getUsername() == post.author.name">
               <mat-icon (click)="openDialog(post)">create</mat-icon>
+              <mat-icon (click)="delete(post)">delete</mat-icon>
             </div>
           </div>
         </mat-toolbar-row>
