@@ -2,7 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {User} from "../data.model";
 import * as jwt_decode from 'jwt-decode';
-import {tap} from "rxjs/operators";
+import {catchError, tap} from "rxjs/operators";
+import {FeedbackService} from "../feedback/feedback.service";
+import {Observable, of} from "rxjs";
 
 
 const httpOptions = {
@@ -17,8 +19,9 @@ export class JwtService {
 
   api = 'http://localhost:8080/api';
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private feedbackService: FeedbackService) {
   }
+
 
   ////////////////////////////////////////////////////////////////////
 
@@ -49,9 +52,13 @@ export class JwtService {
   login(name: string, password: string) {
     const user = {name: name, password: password};
 
-    return this.httpClient.post<{ access_token: string }>(`${this.api}/sign-in`, user).pipe(tap(res => {
-      this.setToken(res.access_token);
-    }));
+    return this.httpClient.post<{ access_token: string }>(`${this.api}/sign-in`, user).pipe(
+      tap(res => {
+        this.setToken(res.access_token);
+        this.feedbackService.info.next(`${name} connected`);
+      }),
+      catchError(this.feedbackService.handleError<{ access_token: string }>('login'))
+    );
   }
 
   // TODO add a register form

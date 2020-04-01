@@ -9,29 +9,14 @@ import {environment} from "../../environments/environment";
 const headers = new HttpHeaders().set('Accept', 'application/json');
 
 @Injectable()
+// TODO refactor pour que les méthodes get, save, ... ne soient pas dupliquées
 export class DataService {
 
 
   constructor(private http: HttpClient, private feedbackService : FeedbackService) {
   }
 
-  /**
-   * Handle Http operation that failed.
-   * Let the app continue.
-   * @param operation - name of the operation that failed
-   * @param result - optional value to return as the observable result
-   */
-  private handleError<T> (operation = 'operation', result?: T) {
 
-    return (error: any): Observable<T> => {
-      this.feedbackService.warning.next(`${operation} failed: ${error.message}`);
-
-      console.log(`${operation} failed`); // TODO remove console
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
-  }
 
   //////////////////////////////////////////////////////////////////////////////
 
@@ -39,7 +24,7 @@ export class DataService {
     const params = new HttpParams();
     return this.http.get<User[]>(`${environment.apiUrl}/users`, {params, headers}).pipe(
       tap(_ => console.log('fetched users')), // TODO remove console
-      catchError(this.handleError<User[]>('getUsers', []))
+      catchError(this.feedbackService.handleError<User[]>('getUsers', []))
     );
   }
 
@@ -48,7 +33,7 @@ export class DataService {
     let url = `${environment.apiUrl}/users/${id.toString()}`;
     return this.http.delete(url, {headers, params}).pipe(
       tap(_ => this.feedbackService.info.next(`user ${id} deleted`)),
-      catchError(this.handleError<any>('deleteUser'))
+      catchError(this.feedbackService.handleError<any>('deleteUser'))
     );
   }
 
@@ -58,7 +43,7 @@ export class DataService {
     const params = new HttpParams();
     return this.http.get<Post[]>(`${environment.apiUrl}/posts`, {params, headers}).pipe(
       tap(_ => console.log('fetched posts')), // TODO remove console
-      catchError(this.handleError<Post[]>('getPosts', []))
+      catchError(this.feedbackService.handleError<Post[]>('getPosts', []))
     );
   }
 
@@ -68,7 +53,7 @@ export class DataService {
 
     return this.http.post<Post>(url, entity, {headers, params}).pipe(
       tap(reponse => this.feedbackService.info.next(`new post created at ${reponse.dateTime} with id ${reponse.id}`)),
-      catchError(this.handleError<Post>('savePost'))
+      catchError(this.feedbackService.handleError<Post>('savePost'))
     );
   }
 
@@ -78,9 +63,8 @@ export class DataService {
     return this.http.delete(url, {headers, params}).pipe(
       tap(_ => {
         this.feedbackService.info.next(`post ${id} deleted`);
-        // location.reload(); // TODO reload empeche le snackbar
       }),
-      catchError(this.handleError<any>('deletePost'))
+      catchError(this.feedbackService.handleError<any>('deletePost'))
     );
   }
 

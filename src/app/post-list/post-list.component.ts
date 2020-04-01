@@ -45,7 +45,7 @@ export class PostListComponent implements OnInit {
 
   delete(post: Post): void {
     if (confirm('Are you sure?')) {
-      this.dataService.deletePost(post.id).subscribe();
+      this.dataService.deletePost(post.id).subscribe(value => this.getPosts());
     }
   }
 }
