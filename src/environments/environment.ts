@@ -2,8 +2,7 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-// const server = 'localhost:8080';
-const server = 'blog-spring-api.herokuapp.com';
+const server = 'localhost:8080';
 
 export const environment = {
   production: false,

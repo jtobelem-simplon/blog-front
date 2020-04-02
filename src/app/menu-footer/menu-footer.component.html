@@ -1,7 +1,7 @@
 <mat-toolbar *ngIf="jwtService.isLogged()" color="secondary">
   <mat-toolbar-row>
     <div >
-      <mat-icon (click)="openDialog()">add_comment</mat-icon>
+      <mat-icon (click)="openDialog()" matTooltip="Ajoute un nouveau billet">add_comment</mat-icon>
     </div>
   </mat-toolbar-row>
 </mat-toolbar>

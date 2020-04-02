@@ -13,7 +13,7 @@ import {DataService} from "./shared/data.service";
 import {MenuHeaderComponent} from './menu-header/menu-header.component';
 import {MenuFooterComponent} from './menu-footer/menu-footer.component';
 import {NewPostDialog} from "./post-list/new-dialog/new-post-dialog";
-import { UserListComponent } from './user-list/user-list.component';
+import {UserListComponent} from './user-list/user-list.component';
 import {UserGuard} from "./shared/guards/user.guard";
 import {AdminGuard} from "./shared/guards/admin.guard";
 import {environment} from "../environments/environment";

@@ -17,6 +17,7 @@
     <div *ngIf="!jwtService.isLogged()">
       <button mat-button (click)="loginBouton()">login</button>
     </div>
+    <mat-icon (click)="initData()" matTooltip="Réinitialise toutes les données">data_usage</mat-icon>
 
   </mat-toolbar-row>
 

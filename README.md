@@ -31,4 +31,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 https://www.techiediaries.com/angular/jwt-authentication-angular-9-example/
 
 
-https://stackblitz.com/github/jtobelem-simplon/blog-front
+https://blog-front-3584b.web.app/

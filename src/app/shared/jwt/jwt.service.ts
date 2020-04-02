@@ -10,6 +10,7 @@ import {environment} from "../../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
+// TODO nettoyer cette classe
 export class JwtService {
 
   constructor(private httpClient: HttpClient, private feedbackService: FeedbackService) {
@@ -19,22 +20,19 @@ export class JwtService {
   ////////////////////////////////////////////////////////////////////
 
   isLogged(): boolean {
-    if (this.getToken()) {
-      return true;
-    }
-    return false;
+    return Boolean(JwtService.getToken());
   }
 
-  getUsername() : string {
+  getUsername(): string {
     if (this.isLogged()) {
-      return this.userFromToken(this.getToken()).name;
+      return JwtService.userFromToken(JwtService.getToken()).name;
     }
     return undefined;
   }
 
-  getRole() : string {
+  getRole(): string {
     if (this.isLogged()) {
-      return this.userFromToken(this.getToken()).role.label;
+      return JwtService.userFromToken(JwtService.getToken()).role.label;
     }
     return undefined;
   }
@@ -47,7 +45,7 @@ export class JwtService {
 
     return this.httpClient.post<{ access_token: string }>(`${environment.apiUrl}/sign-in`, user).pipe(
       tap(res => {
-        this.setToken(res.access_token);
+        JwtService.setToken(res.access_token);
         this.feedbackService.info.next(`${name} connected`);
       }),
       catchError(this.feedbackService.handleError<{ access_token: string }>('login'))
@@ -58,39 +56,38 @@ export class JwtService {
   register(name: string, password: string) {
     const user = {name: name, password: password};
 
-    this.httpClient.post<{ access_token: string }>(`${environment.apiUrl}/sign-up`, user).pipe(tap(res => {
+    this.httpClient.post<{ access_token: string }>(`${environment.apiUrl}/sign-up`, user).pipe(tap(_ => {
       this.login(name, password);
     }));
   }
 
   logout() {
-    this.clearToken();
+    if (this.isLogged()) {
+      this.feedbackService.info.next(`${this.getUsername()} disconnected`);
+      JwtService.clearToken();
+    }
   }
 
-  private getToken(): string {
+  private static getToken(): string {
     return localStorage.getItem('access_token');
   }
 
-  private setToken(token: string) {
+  private static setToken(token: string) {
     localStorage.setItem('access_token', token);
-
-    const newUser = this.userFromToken(token);
   }
 
-  private clearToken() {
+  private static clearToken() {
     localStorage.removeItem('access_token');
   }
 
-  private userFromToken(token: string): User {
+  private static userFromToken(token: string): User {
     const decodedToken = jwt_decode(token);
 
     const name = decodedToken.sub;
     const roles = decodedToken.auth.map(authority => {
-      return {label : authority.authority};
+      return {label: authority.authority};
     });
 
-    let newUser: User = {id: 0, name: name, role: roles[0]};
-
-    return newUser;
+    return {id: 0, name: name, role: roles[0]};
   }
 }

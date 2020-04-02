@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "blog-front-3584b"
+  },
+  "targets": {
+    "blog-front-3584b": {
+      "hosting": {
+        "blog-front": [
+          "blog-front-3584b"
+        ]
+      }
+    }
+  }
+}

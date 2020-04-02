@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {JwtService} from "../shared/jwt/jwt.service";
 import {FeedbackService} from "../shared/feedback/feedback.service";
 import {Router} from "@angular/router";
+import {DataService} from "../shared/data.service";
 
 @Component({
   selector: 'app-menu-header',
@@ -13,7 +14,7 @@ export class MenuHeaderComponent implements OnInit {
   hide = true;
   showLogin = false;
 
-  constructor(public jwtService: JwtService, private feedbackService:FeedbackService, private router: Router) { }
+  constructor(public jwtService: JwtService, private feedbackService:FeedbackService, private dataService: DataService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -27,12 +28,15 @@ export class MenuHeaderComponent implements OnInit {
   }
 
   login(user : string, password : string) {
-    this.jwtService.login(user, password).subscribe(res => this.loginBouton());
+    this.jwtService.login(user, password).subscribe(_ => this.loginBouton());
   }
 
   logout() {
     this.jwtService.logout();
-    this.feedbackService.info.next("disconnected");
+  }
+
+  initData(){
+    this.dataService.initData().subscribe(_ => location.reload());
   }
 
 }

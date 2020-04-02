@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Post, User} from "./data.model";
 import {catchError, tap} from "rxjs/operators";
@@ -13,10 +13,15 @@ const headers = new HttpHeaders().set('Accept', 'application/json');
 export class DataService {
 
 
-  constructor(private http: HttpClient, private feedbackService : FeedbackService) {
+  constructor(private http: HttpClient, private feedbackService: FeedbackService) {
   }
 
-
+  initData(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/init`).pipe(
+      tap(_ => console.log('init data')), // TODO remove console
+      catchError(this.feedbackService.handleError<any>('initData'))
+    );
+  }
 
   //////////////////////////////////////////////////////////////////////////////
 
@@ -28,7 +33,7 @@ export class DataService {
     );
   }
 
-  deleteUser(id: number) : Observable<any>{
+  deleteUser(id: number): Observable<any> {
     let params = new HttpParams();
     let url = `${environment.apiUrl}/users/${id.toString()}`;
     return this.http.delete(url, {headers, params}).pipe(
@@ -49,7 +54,7 @@ export class DataService {
 
   savePost(entity: Post): Observable<Post> {
     let params = new HttpParams();
-    const url = entity.id?`${environment.apiUrl}/posts/${entity.id.toString()}`:`${environment.apiUrl}/posts`;
+    const url = entity.id ? `${environment.apiUrl}/posts/${entity.id.toString()}` : `${environment.apiUrl}/posts`;
 
     return this.http.post<Post>(url, entity, {headers, params}).pipe(
       tap(reponse => this.feedbackService.info.next(`new post created at ${reponse.dateTime} with id ${reponse.id}`)),
@@ -57,7 +62,7 @@ export class DataService {
     );
   }
 
-  deletePost(id: number) : Observable<any>{
+  deletePost(id: number): Observable<any> {
     let params = new HttpParams();
     let url = `${environment.apiUrl}/posts/${id.toString()}`;
     return this.http.delete(url, {headers, params}).pipe(
