@@ -16,6 +16,7 @@ import {NewPostDialog} from "./post-list/new-dialog/new-post-dialog";
 import { UserListComponent } from './user-list/user-list.component';
 import {UserGuard} from "./shared/guards/user.guard";
 import {AdminGuard} from "./shared/guards/admin.guard";
+import {environment} from "../environments/environment";
 
 @NgModule({
   declarations: [
@@ -37,8 +38,8 @@ import {AdminGuard} from "./shared/guards/admin.guard";
       config: {
         tokenGetter: function  tokenGetter() {
           return     localStorage.getItem('access_token');},
-        whitelistedDomains: ['localhost:8080'],
-        blacklistedRoutes: ['http://localhost:8080/api/sign-in']
+        whitelistedDomains: [environment.server],
+        blacklistedRoutes: [`${environment.apiUrl}/sign-in`]
       }
     })
   ],

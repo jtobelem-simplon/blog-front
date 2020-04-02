@@ -1,23 +1,16 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {User} from "../data.model";
 import * as jwt_decode from 'jwt-decode';
 import {catchError, tap} from "rxjs/operators";
 import {FeedbackService} from "../feedback/feedback.service";
-import {Observable, of} from "rxjs";
-
-
-const httpOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json'})
-};
+import {environment} from "../../../environments/environment";
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class JwtService {
-
-  api = 'http://localhost:8080/api';
 
   constructor(private httpClient: HttpClient, private feedbackService: FeedbackService) {
   }
@@ -52,7 +45,7 @@ export class JwtService {
   login(name: string, password: string) {
     const user = {name: name, password: password};
 
-    return this.httpClient.post<{ access_token: string }>(`${this.api}/sign-in`, user).pipe(
+    return this.httpClient.post<{ access_token: string }>(`${environment.apiUrl}/sign-in`, user).pipe(
       tap(res => {
         this.setToken(res.access_token);
         this.feedbackService.info.next(`${name} connected`);
@@ -65,7 +58,7 @@ export class JwtService {
   register(name: string, password: string) {
     const user = {name: name, password: password};
 
-    this.httpClient.post<{ access_token: string }>(`${this.api}/sign-up`, user).pipe(tap(res => {
+    this.httpClient.post<{ access_token: string }>(`${environment.apiUrl}/sign-up`, user).pipe(tap(res => {
       this.login(name, password);
     }));
   }
