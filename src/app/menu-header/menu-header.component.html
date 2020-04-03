@@ -15,7 +15,7 @@
       </mat-menu>
     </div>
     <div *ngIf="!jwtService.isLogged()">
-      <button mat-button (click)="loginBouton()">login</button>
+      <button mat-button (click)="loginBouton()" matTooltip="lp4/lp4 ou admin/admin">login</button>
     </div>
     <mat-icon (click)="initData()" matTooltip="Réinitialise toutes les données">data_usage</mat-icon>
 
