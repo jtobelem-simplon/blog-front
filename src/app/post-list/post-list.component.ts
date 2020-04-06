@@ -35,9 +35,15 @@ export class PostListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.dataService.savePost(result).subscribe(_ => this.getPosts())
+      this.savePost(result);
     });
   }
+
+  private savePost(post : Post) {
+    this.dataService.savePost(post).subscribe(value => {
+      this.getPosts();
+    })
+}
 
   select(selected: Post): void {
     this.selectedPost = selected;

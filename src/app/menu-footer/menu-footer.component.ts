@@ -24,7 +24,9 @@ export class MenuFooterComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.postService.savePost(result).subscribe();
+      this.postService.savePost(result).subscribe(value => {
+        location.reload(); // TODO utilise getPost dans postList
+      });
     })
 
   }
