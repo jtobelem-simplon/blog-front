@@ -50,7 +50,7 @@ export class PostListComponent implements OnInit {
   }
 
   delete(post: Post): void {
-    if (confirm('Are you sure?')) {
+    if (confirm("Est-ce que vous confirmez?")) {
       this.dataService.deletePost(post.id).subscribe(value => this.getPosts());
     }
   }

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Post, User} from "./data.model";
 import {catchError, tap} from "rxjs/operators";
@@ -17,10 +17,14 @@ export class DataService {
   }
 
   initData(): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/init`).pipe(
-      tap(_ => console.log('init data')), // TODO remove console
-      catchError(this.feedbackService.handleError<any>('initData'))
-    );
+    if (confirm("Est-ce que vous confirmez la réinitialisation de toutes les données?")) {
+      return this.http.get<any>(`${environment.apiUrl}/init`).pipe(
+        tap(_ => console.log('init data')), // TODO remove console
+        catchError(this.feedbackService.handleError<any>('initData'))
+      );
+    } else {
+      return of<any>();
+    }
   }
 
   //////////////////////////////////////////////////////////////////////////////
@@ -54,12 +58,22 @@ export class DataService {
 
   savePost(entity: Post): Observable<Post> {
     let params = new HttpParams();
-    const url = entity.id ? `${environment.apiUrl}/posts/${entity.id.toString()}` : `${environment.apiUrl}/posts`;
 
-    return this.http.post<Post>(url, entity, {headers, params}).pipe(
-      tap(reponse => this.feedbackService.info.next(`new post created at ${reponse.dateTime} with id ${reponse.id}`)),
-      catchError(this.feedbackService.handleError<Post>('savePost'))
-    );
+    if (entity.id) {
+      const url = `${environment.apiUrl}/posts/${entity.id.toString()}`;
+      return this.http.put<Post>(url, entity, {headers, params}).pipe(
+        tap(reponse => this.feedbackService.info.next(`post updtaed at ${reponse.dateTime} with id ${reponse.id}`)),
+        catchError(this.feedbackService.handleError<Post>('savePost'))
+      );
+    }
+    else {
+      const url = `${environment.apiUrl}/posts`;
+      return this.http.post<Post>(url, entity, {headers, params}).pipe(
+        tap(reponse => this.feedbackService.info.next(`new post created at ${reponse.dateTime} with id ${reponse.id}`)),
+        catchError(this.feedbackService.handleError<Post>('savePost'))
+      );
+    }
+
   }
 
   deletePost(id: number): Observable<any> {

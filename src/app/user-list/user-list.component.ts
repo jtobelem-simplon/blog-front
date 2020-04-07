@@ -26,7 +26,7 @@ export class UserListComponent implements OnInit {
 
 
   delete(id: number) {
-    if (confirm('Are you sure?')) {
+    if (confirm('Est-ce que vous confirmez?')) {
       this.dataService.deleteUser(id).subscribe(value => this.getUsers());
     }
   }
