@@ -4,9 +4,11 @@ export interface Role {
 }
 
 export interface User {
-  id: number;
+  id?: number;
   name: string;
   role: Role;
+  email?: string;
+  birthday?: Date;
 }
 
 export interface Post {

@@ -43,7 +43,7 @@ import {MatTreeModule} from '@angular/material/tree';
 
 @NgModule({
   exports: [
-    A11yModule,
+    A11yModule, // TODO nttoyer les modules inutilisés
     CdkStepperModule,
     CdkTableModule,
     CdkTreeModule,

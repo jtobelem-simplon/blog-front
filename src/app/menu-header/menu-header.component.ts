@@ -28,7 +28,10 @@ export class MenuHeaderComponent implements OnInit {
   }
 
   login(user : string, password : string) {
-    this.jwtService.login(user, password).subscribe(_ => this.loginBouton());
+    this.jwtService.login(user, password).subscribe(_ => {
+      this.loginBouton();
+      this.router.navigate(["/post"]);
+    });
   }
 
   logout() {

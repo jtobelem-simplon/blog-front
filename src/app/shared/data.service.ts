@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {Post, User} from "./data.model";
+import {Post, Role, User} from "./data.model";
 import {catchError, tap} from "rxjs/operators";
 import {FeedbackService} from "./feedback/feedback.service";
 import {environment} from "../../environments/environment";
@@ -29,6 +29,12 @@ export class DataService {
 
   //////////////////////////////////////////////////////////////////////////////
 
+  users: BehaviorSubject<User[]> = new BehaviorSubject(undefined);
+
+  loadUsers() {
+    this.getUsers().subscribe(users => this.users.next(users));
+  }
+
   getUsers(): Observable<User[]> {
     const params = new HttpParams();
     return this.http.get<User[]>(`${environment.apiUrl}/users`, {params, headers}).pipe(
@@ -46,23 +52,60 @@ export class DataService {
     );
   }
 
+  saveUser(entity: User): Observable<User> {
+    console.log(">> new", entity);
+
+    let params = new HttpParams();
+
+    if (entity.id) {
+      console.log("put");
+
+      const url = `${environment.apiUrl}/users/${entity.id.toString()}`;
+      return this.http.put<User>(url, entity, {headers, params}).pipe(
+        tap(reponse => this.feedbackService.info.next(`user updated at ${new Date()} with id ${reponse.id}`)),
+        catchError(this.feedbackService.handleError<User>('saveUser'))
+      );
+    }
+    else {
+      const url = `${environment.apiUrl}/users`;
+
+      console.log("post", url, entity);
+
+      return this.http.post<User>(url, entity, {headers, params}).pipe(
+        tap(reponse => this.feedbackService.info.next(`new user created at ${new Date()} with id ${reponse.id}`)),
+        catchError(this.feedbackService.handleError<User>('saveUser'))
+      );
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  getRoles(): Observable<Role[]> {
+    const params = new HttpParams();
+    return this.http.get<Role[]>(`${environment.apiUrl}/roles`, {params, headers}).pipe(
+      tap(_ => console.log('fetched roles')), // TODO remove console
+      catchError(this.feedbackService.handleError<Role[]>('getRoles', []))
+    );
+  }
+
   //////////////////////////////////////////////////////////////////////////////
 
   getPosts(): Observable<Post[]> {
     const params = new HttpParams();
     return this.http.get<Post[]>(`${environment.apiUrl}/posts`, {params, headers}).pipe(
       tap(_ => console.log('fetched posts')), // TODO remove console
-      catchError(this.feedbackService.handleError<Post[]>('getPosts', []))
+      catchError(this.feedbackService.handleError<Post[]>('getPosts', [])) // TODO attraper les erreurs avec un interceptor
     );
   }
 
   savePost(entity: Post): Observable<Post> {
     let params = new HttpParams();
 
+
     if (entity.id) {
       const url = `${environment.apiUrl}/posts/${entity.id.toString()}`;
       return this.http.put<Post>(url, entity, {headers, params}).pipe(
-        tap(reponse => this.feedbackService.info.next(`post updtaed at ${reponse.dateTime} with id ${reponse.id}`)),
+        tap(reponse => this.feedbackService.info.next(`post updated at ${reponse.dateTime} with id ${reponse.id}`)),
         catchError(this.feedbackService.handleError<Post>('savePost'))
       );
     }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {JwtService} from "./shared/jwt/jwt.service";
 import {FeedbackService} from "./shared/feedback/feedback.service";
@@ -10,6 +10,7 @@ import {FeedbackService} from "./shared/feedback/feedback.service";
 })
 export class AppComponent implements OnInit {
 
+
   title = 'blog-front';
 
   constructor(public jwtService: JwtService, private feedbackService: FeedbackService, private snackBar: MatSnackBar) {
@@ -17,9 +18,12 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.jwtService.logout();
     this.feedbackService.info.subscribe(next => this.openSnackBar(next, true));
     this.feedbackService.warning.subscribe(next => this.openSnackBar(next, false));
   }
+
+
 
   openSnackBar(message: string, info: boolean) {
     if (message) {

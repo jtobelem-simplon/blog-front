@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {User} from "../shared/data.model";
 import {DataService} from "../shared/data.service";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
   selector: 'app-user-list',
@@ -9,25 +10,21 @@ import {DataService} from "../shared/data.service";
 })
 export class UserListComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'role', 'action'];
+  displayedColumns: string[] = ['id', 'name', 'role', 'email', 'birthday', 'action'];
 
   constructor(public dataService: DataService) {
   }
 
-  users: User[];
+
 
   ngOnInit(): void {
-    this.getUsers();
-  }
-
-  getUsers() {
-    this.dataService.getUsers().subscribe(users => this.users = users);
+    this.dataService.loadUsers();
   }
 
 
   delete(id: number) {
     if (confirm('Est-ce que vous confirmez?')) {
-      this.dataService.deleteUser(id).subscribe(value => this.getUsers());
+      this.dataService.deleteUser(id).subscribe(value => this.dataService.loadUsers());
     }
   }
 

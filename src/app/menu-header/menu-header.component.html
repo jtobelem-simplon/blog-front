@@ -5,7 +5,7 @@
     </div>
 
     <div *ngIf="jwtService.getRole() == 'ADMIN'">
-      <button mat-button routerLink="/admin">admin</button>
+      <button mat-button routerLink="/admin">administration</button>
     </div>
 
     <div *ngIf="jwtService.isLogged()">

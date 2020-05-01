@@ -69,15 +69,15 @@ export class JwtService {
   }
 
   private static getToken(): string {
-    return localStorage.getItem('access_token');
+    return sessionStorage.getItem('access_token');
   }
 
   private static setToken(token: string) {
-    localStorage.setItem('access_token', token);
+    sessionStorage.setItem('access_token', token); // TODO mettre dans le sessionStorage? https://stackoverflow.com/questions/40230338/jwt-storing-them-in-localstorage-vs-sessionstorage
   }
 
   private static clearToken() {
-    localStorage.removeItem('access_token');
+    sessionStorage.removeItem('access_token');
   }
 
   private static userFromToken(token: string): User {

@@ -1,0 +1,31 @@
+
+<form #myForm="ngForm" [formGroup]="form" class="container">
+  <div mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Nom</mat-label>
+      <input type="text" matInput formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Birthday</mat-label>
+      <input matInput [matDatepicker]="birthdayDatepicker" formControlName="birthday">
+      <mat-datepicker-toggle matSuffix [for]="birthdayDatepicker"></mat-datepicker-toggle>
+      <mat-datepicker #birthdayDatepicker></mat-datepicker>
+      <mat-error *ngIf="form.get('birthday').errors">{{form.get('birthday').errors['invalidDate']}}</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Role</mat-label>
+      <mat-select matInput formControlName="role">
+        <mat-option *ngFor="let roleElem of roles" [value]="roleElem">
+          {{roleElem.label}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="submit(); myForm.reset()">create</button>
+  </div>
+</form>

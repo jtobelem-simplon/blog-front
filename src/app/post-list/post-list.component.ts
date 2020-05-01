@@ -40,8 +40,9 @@ export class PostListComponent implements OnInit {
   }
 
   private savePost(post : Post) {
-    this.dataService.savePost(post).subscribe(value => {
-      this.getPosts();
+    this.dataService.savePost(post).subscribe(savedPost => {
+      //this.getPosts(); // TODO pas besoin de chercher la liste complète
+      this.posts.push(savedPost);
     })
 }
 
